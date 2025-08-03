@@ -2,46 +2,17 @@ body {
     font-family: Arial, sans-serif;
     padding: 20px;
 }
-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
 form input, form select, form button {
-    padding: 10px;
-    font-size: 1rem;
-    flex: 1 1 200px;
+    margin: 5px;
+    padding: 8px;
 }
 table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    font-size: 0.9rem;
-}
-table, th, td {
-    border: 1px solid #ccc;
 }
 th, td {
+    border: 1px solid #ccc;
     padding: 10px;
     text-align: center;
-}
-@media (max-width: 768px) {
-    table, thead, tbody, th, td, tr {
-        display: block;
-    }
-    thead tr {
-        display: none;
-    }
-    td {
-        position: relative;
-        padding-left: 50%;
-        text-align: left;
-    }
-    td::before {
-        position: absolute;
-        left: 10px;
-        top: 10px;
-        white-space: nowrap;
-        font-weight: bold;
-    }
 }
