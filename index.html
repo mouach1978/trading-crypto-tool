@@ -1,41 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <title>Outil Trading Crypto</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Outil Trading Crypto</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <h1>📈 Outil de Trading Crypto</h1>
-    <form id="trade-form">
-        <input type="text" placeholder="Nom crypto (ex: BTC)" id="crypto-name" required>
-        <select id="order-type">
-            <option value="Market">Marché</option>
-            <option value="Limit">Limite</option>
-        </select>
-        <select id="position-type">
-            <option value="Long">Long</option>
-            <option value="Short">Short</option>
-        </select>
-        <input type="number" step="any" placeholder="Prix d'achat ($)" id="entry-price" required>
-        <input type="number" step="any" placeholder="Stop Loss ($)" id="sl-price">
-        <input type="number" step="any" placeholder="Take Profit ($)" id="pl-price">
-        <input type="number" step="any" placeholder="Levier (x1 à x100)" id="leverage" value="1">
-        <input type="number" step="any" placeholder="Montant investi ($)" id="amount" required>
-        <button type="submit">Ajouter Trade</button>
-    </form>
-
-    <h2>📊 Trades Actifs</h2>
-    <table id="trade-table">
-        <thead>
-            <tr>
-                <th>Crypto</th><th>Type</th><th>Position</th><th>Prix Achat</th><th>SL</th><th>PL</th>
-                <th>Levier</th><th>Investi</th><th>Cours actuel</th><th>% Écart</th><th>PnL</th><th>PnL SL/TP</th><th></th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-
-    <script src="script.js"></script>
+  <h1>📈 Outil de Trading Crypto</h1>
+  <form id="trade-form">
+    <input type="text" placeholder="Crypto (ex: BTC ou bitcoin)" id="crypto-name" required />
+    <select id="order-type">
+      <option value="Market">Market</option>
+      <option value="Limit">Limit</option>
+    </select>
+    <select id="position-type">
+      <option value="Long">Long</option>
+      <option value="Short">Short</option>
+    </select>
+    <input type="number" step="any" placeholder="Prix achat ($)" id="entry-price" required />
+    <input type="number" step="any" placeholder="Stop Loss ($)" id="sl-price" />
+    <input type="number" step="any" placeholder="Take Profit ($)" id="pl-price" />
+    <input type="number" step="any" placeholder="Levier" id="leverage" value="1" />
+    <input type="number" step="any" placeholder="Montant investi ($)" id="amount" required />
+    <button type="submit">Ajouter Trade</button>
+  </form>
+  <h2>📊 Trades Actifs</h2>
+  <table id="trade-table">
+    <thead>
+      <tr>
+        <th>Crypto</th><th>Type</th><th>Position</th><th>Prix Achat</th><th>SL</th><th>PL</th>
+        <th>Levier</th><th>Investi</th><th>Cours actuel</th><th>% Écart</th><th>PnL</th><th>PnL SL/TP</th><th></th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script src="script.js"></script>
 </body>
 </html>

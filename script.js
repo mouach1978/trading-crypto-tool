@@ -1,54 +1,57 @@
-
 let coinList = [];
 
 async function loadCoinList() {
     try {
-        const response = await fetch('https://api.coingecko.com/api/v3/coins/list');
+        const response = await fetch("https://api.coingecko.com/api/v3/coins/list");
         coinList = await response.json();
     } catch (e) {
-        alert("❌ Impossible de charger la liste des cryptos depuis CoinGecko.");
+        alert("❌ Échec du chargement des cryptos CoinGecko.");
     }
 }
 
 async function fetchCurrentPrice(symbol) {
-    const coin = coinList.find(c => c.symbol === symbol.toLowerCase());
-    if (!coin) {
+    const lowerSymbol = symbol.toLowerCase();
+    const matches = coinList.filter(c => c.symbol === lowerSymbol || c.id === lowerSymbol);
+    if (!matches.length) {
         alert("⚠️ Crypto non reconnue : " + symbol);
         return null;
     }
+    const coin = matches[0];
     try {
-        const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${coin.id}&vs_currencies=usd`);
-        const data = await response.json();
-        return data[coin.id]?.usd || null;
+        const url = `https://api.coingecko.com/api/v3/simple/price?ids=${coin.id}&vs_currencies=usd`;
+        const res = await fetch(url);
+        const data = await res.json();
+        const price = data[coin.id]?.usd;
+        return typeof price === "number" ? price : null;
     } catch {
         return null;
     }
 }
 
-function getPnlStatus(trade) {
-    const c = parseFloat(trade.current);
+function getStatus(trade) {
+    const price = parseFloat(trade.current);
     const sl = parseFloat(trade.sl);
     const pl = parseFloat(trade.pl);
-    if (c <= 0) return "⚠️ Prix invalide";
+    if (price <= 0) return "⚠️ Prix invalide";
     if (trade.position === "Long") {
-        if (c <= sl) return "🟥 Sous SL";
-        if (c >= pl) return "🟩 Atteint TP";
+        if (price <= sl) return "🟥 Sous SL";
+        if (price >= pl) return "🟩 Atteint TP";
     } else {
-        if (c >= sl) return "🟥 Sous SL";
-        if (c <= pl) return "🟩 Atteint TP";
+        if (price >= sl) return "🟥 Sous SL";
+        if (price <= pl) return "🟩 Atteint TP";
     }
     return "🔵 En cours";
 }
 
 function createRow(trade, index) {
     return `<tr>
-        <td>${trade.crypto}</td><td>${trade.type}</td><td>${trade.position}</td>
-        <td>${trade.entry} $</td><td>${trade.sl}</td><td>${trade.pl}</td>
-        <td>x${trade.leverage}</td><td>${trade.amount} $</td>
-        <td>${trade.current} $</td><td>${trade.diffPercent}</td>
-        <td style="color:${trade.pnl >= 0 ? 'green' : 'red'}">${trade.pnl} $</td>
-        <td>${getPnlStatus(trade)}</td>
-        <td><button onclick="editTrade(${index})">✏️</button></td>
+      <td>${trade.crypto}</td><td>${trade.type}</td><td>${trade.position}</td>
+      <td>${trade.entry} $</td><td>${trade.sl}</td><td>${trade.pl}</td>
+      <td>x${trade.leverage}</td><td>${trade.amount} $</td>
+      <td>${trade.current} $</td><td>${trade.diffPercent}</td>
+      <td style="color:${trade.pnl >= 0 ? 'green' : 'red'}">${trade.pnl} $</td>
+      <td>${getStatus(trade)}</td>
+      <td><button onclick="editTrade(${index})">✏️</button></td>
     </tr>`;
 }
 
@@ -62,8 +65,14 @@ function refreshTable() {
 function editTrade(i) {
     const trades = JSON.parse(localStorage.getItem("trades") || "[]");
     const t = trades[i];
-    ["crypto", "order-type", "position-type", "entry-price", "sl-price", "pl-price", "leverage", "amount"].forEach(id =>
-        document.getElementById(id).value = t[id.replace("-", "_")] || t[id]);
+    document.getElementById("crypto-name").value = t.crypto;
+    document.getElementById("order-type").value = t.type;
+    document.getElementById("position-type").value = t.position;
+    document.getElementById("entry-price").value = t.entry;
+    document.getElementById("sl-price").value = t.sl;
+    document.getElementById("pl-price").value = t.pl;
+    document.getElementById("leverage").value = t.leverage;
+    document.getElementById("amount").value = t.amount;
     trades.splice(i, 1);
     localStorage.setItem("trades", JSON.stringify(trades));
     refreshTable();
